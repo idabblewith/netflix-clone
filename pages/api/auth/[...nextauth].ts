@@ -67,6 +67,64 @@ export const authOptions: AuthOptions = {
 		secret: process.env.NEXTAUTH_JWT_SECRET,
 	},
 	secret: process.env.NEXTAUTH_SECRET,
+	callbacks: {
+		async signIn({ account, profile }) {
+			if (profile) {
+				if (
+					account?.provider === "google" ||
+					account?.provider === "github"
+				) {
+					let existingUser = await prismadb.user.findUnique({
+						where: {
+							email: profile.email,
+						},
+					});
+					// Create user if non-existent
+					if (!existingUser) {
+						existingUser = await prismadb.user.create({
+							data: {
+								name: profile.name || "Anonymous",
+								email: profile.email,
+							},
+						});
+					}
+					// Safely access account properties
+					const providerAccountId = account?.providerAccountId;
+					const accessToken = account?.access_token;
+					const refreshToken = account?.refresh_token;
+					const expiresAt = account?.expires_at;
+
+					if (providerAccountId) {
+						// Link the account to the user
+						await prismadb.account.upsert({
+							where: {
+								provider_providerAccountId: {
+									provider: account.provider,
+									providerAccountId: providerAccountId,
+								},
+							},
+							update: {
+								access_token: accessToken,
+								refresh_token: refreshToken,
+								expires_at: expiresAt,
+							},
+							create: {
+								userId: existingUser.id,
+								type: account.type,
+								provider: account.provider,
+								providerAccountId: providerAccountId,
+								access_token: accessToken,
+								refresh_token: refreshToken,
+								expires_at: expiresAt,
+							},
+						});
+					}
+				}
+				return true;
+			}
+			return true;
+		},
+	},
 };
 
 export default NextAuth(authOptions);
