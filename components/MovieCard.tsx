@@ -2,12 +2,16 @@ import React, { useCallback } from "react";
 import { useRouter } from "next/router";
 import { MovieInterface } from "@/types";
 import FavouriteButton from "@/components/FavouriteButton";
+import { BsFillPlayFill } from "react-icons/bs";
 
-interface MovieCardProps {
-	data: MovieInterface;
-}
+const MovieCard = ({ data }: { data: MovieInterface }) => {
+	const router = useRouter();
 
-const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
+	const redirectToWatch = useCallback(
+		() => router.push(`/watch/${data.id}`),
+		[router, data.id]
+	);
+
 	return (
 		<div className="group bg-zinc-900 col-span relative h-[12vw]">
 			<img
@@ -77,6 +81,12 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
                     "
 				>
 					<div className="flex flex-row items-center gap-3">
+						<div
+							onClick={redirectToWatch}
+							className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300"
+						>
+							<BsFillPlayFill className="text-black w-4 lg:w-6" />
+						</div>
 						<FavouriteButton movieId={data.id} />
 					</div>
 					<p className="text-green-400 font-semibold mt-4">
