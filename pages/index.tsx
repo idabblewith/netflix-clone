@@ -1,3 +1,4 @@
+import Billboard from "@/components/Billboard";
 import Navbar from "@/components/Navbar";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { NextPageContext } from "next";
@@ -27,10 +28,7 @@ export default function Home() {
 		<>
 			{/* Navbar */}
 			<Navbar />
-			{/* <p className="text-white">Logged in as: {user?.name}</p>
-			<button className="h-10 w-full bg-white" onClick={() => signOut()}>
-				Sign out
-			</button> */}
+			<Billboard />
 		</>
 	);
 }
