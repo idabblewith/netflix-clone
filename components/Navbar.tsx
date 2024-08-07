@@ -57,7 +57,7 @@ const Navbar = () => {
 					}
                 `}
 			>
-				<img src="/images/logo.png" className="h-4 lg:h-7" />
+				<img src="/images/logo.png" className="h-4 lg:h-7" alt="Logo" />
 				<div
 					className="
                         flex-row 
