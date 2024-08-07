@@ -11,9 +11,7 @@ export default async function handler(
 			return res.status(405).end();
 		}
 
-		await serverAuth(req);
-		// res
-
+		await serverAuth(req, res);
 		const moviesCount = await prismadb.movie.count();
 		const randomIndex = Math.floor(Math.random() * moviesCount);
 
