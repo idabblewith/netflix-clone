@@ -49,6 +49,11 @@ const InfoModal = ({
 							loop
 							src={data?.videoUrl}
 							className="w-full brightness-[60%] object-cover h-full"
+							disablePictureInPicture
+							disableRemotePlayback
+							controlsList="nodownload noplaybackrate nofullscreen"
+							webkit-playsinline
+							playsInline
 						/>
 						<div
 							onClick={handleClose}
